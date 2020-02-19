@@ -1,2 +1,2 @@
 # lora
-Lora simple visualisation
+Simple lora trillateration visualisation
