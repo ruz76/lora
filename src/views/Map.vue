@@ -135,7 +135,7 @@
       }
     },
     updateMap: function () {
-      if (this.sensor.coordinates != null) {
+      if (this.sensor.lon !== undefined && this.sensor.lon.length > 0) {
         let last = this.sensor.lon.length - 1;
         if (this.maptype === "realtime") {
           this.drawCircles(this.sensor.lon, this.sensor.lat, this.sensor.avg_distance_error);

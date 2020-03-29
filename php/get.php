@@ -128,25 +128,41 @@ function getSensor($id, $level, $end, $sensor, $recordscount) {
 
 }
 
+function getSensors($level, $end, $recordscount) {
+    $SQL = "SELECT * FROM sensors";
+    $rec = mysqli_query($GLOBALS["___mysqli_ston"], $SQL);
+    $i = 0;
+    while ($row = mysqli_fetch_array($rec,MYSQLI_ASSOC)){
+        $s1 = new Sensor();
+        $s1->title = $row["name"];
+        $s1->info = $row["description"];
+        if ($i != 0) {
+            echo ", ";
+        }
+        getSensor($row["id"], $level, $end, $s1, $recordscount);
+        $i++;
+    }
+}
+
 require_once('config.php');
 $con = connect();
 
 mysqli_query($GLOBALS["___mysqli_ston"], "set names utf8") or die("Some error occurs. Please try again. Use button Back in your browser.");
 
-$s1 = new Sensor();
-$s1->title = "Static X1";
-$s1->info = "IX1";
-$s1->coordinates = [18.22554, 49.81724];
-
-$s2 = new Sensor();
-$s2->title = "Static X2";
-$s2->info = "IX2";
-$s2->coordinates = [18.23091, 49.82001];
-
-$s3 = new Sensor();
-$s3->title = "Dynamic X2";
-$s3->info = "IX3";
-$s3->coordinates = [18.23091, 49.82001];
+//$s1 = new Sensor();
+//$s1->title = "Static X1";
+//$s1->info = "IX1";
+//$s1->coordinates = [18.22554, 49.81724];
+//
+//$s2 = new Sensor();
+//$s2->title = "Static X2";
+//$s2->info = "IX2";
+//$s2->coordinates = [18.23091, 49.82001];
+//
+//$s3 = new Sensor();
+//$s3->title = "Dynamic X2";
+//$s3->info = "IX3";
+//$s3->coordinates = [18.23091, 49.82001];
 
 $end = "2020-01-25";
 if (isset($_REQUEST["end"])) {
@@ -167,11 +183,16 @@ if (isset($_REQUEST["recordscount"]) && in_array($_REQUEST["recordscount"], $rec
 
 echo "{
   \"sensors\": [";
-getSensor(1, $level, $end, $s1, $recordscount);
-echo ", ";
-getSensor(2, $level, $end, $s2, $recordscount);
-echo ", ";
-getSensor(3, $level, $end, $s3, $recordscount);
+
+    getSensors($level, $end, $recordscount);
+
+//
+//getSensor(1, $level, $end, $s1, $recordscount);
+//echo ", ";
+//getSensor(2, $level, $end, $s2, $recordscount);
+//echo ", ";
+//getSensor(3, $level, $end, $s3, $recordscount);
+
 echo "]}";
 
 ((is_null($___mysqli_res = mysqli_close($con))) ? false : $___mysqli_res);
