@@ -17,7 +17,7 @@
               <b-button @click="setStat('avg')">Avg</b-button>
             </div>
             <div>
-              <p>&nbsp;</p>
+              <p><span v-if="error != null">{{error}}</span>&nbsp;</p>
               <p>Time {{currentDate}}</p>
               <base-slider
                   ref="dateSlider"
@@ -27,15 +27,23 @@
                   :onchange="changeDate()"
                   :key="sliderkey"
               />
-              <base-dropdown>
-                <base-button slot="title" type="secondary" class="dropdown-toggle">Time level</base-button>
-                <a
-                    class="dropdown-item"
-                    v-for="(level, index) in timelevels"
-                    :key="`${index}`"
-                    v-on:click="switchToTimeLevel(`${index}`)"
-                >{{level}}</a>
-              </base-dropdown>
+              <p>Time level {{currentTimeLevel}}</p>
+              <base-slider
+                  ref="timeLevelSlider"
+                  v-model="timeLevelSlider"
+                  :range='timeLevelSliderRange'
+                  :step="1"
+                  :onchange="changeTimeLevel()"
+              />
+              <!--<base-dropdown>-->
+                <!--<base-button slot="title" type="secondary" class="dropdown-toggle">Time level</base-button>-->
+                <!--<a-->
+                    <!--class="dropdown-item"-->
+                    <!--v-for="(level, index) in timelevels"-->
+                    <!--:key="`${index}`"-->
+                    <!--v-on:click="switchToTimeLevel(`${index}`)"-->
+                <!--&gt;{{level}}</a>-->
+              <!--</base-dropdown>-->
             </div>
           </div>
         </div>
@@ -121,6 +129,7 @@
     },
     data() {
       return {
+        error: null,
         sliderkey: 1,
         currentTimeLevel: "month",
         timelevels: ["year", "month", "day", "hour", "minute"],
@@ -136,6 +145,9 @@
         statType: 'avg',
         dateSliderBefore: 31,
         dateSlider: 31,
+        timeLevelSliderBefore: 0,
+        timeLevelSlider: 0,
+        timeLevelSliderRange: {min: 0, max: 4},
         distancesErrorChart: {
           chartData: {
             datasets: [],
@@ -213,6 +225,7 @@
     },
     methods: {
       switchToTimeLevel(index) {
+        console.log(index);
         this.currentTimeLevel = this.timelevels[index];
         this.sliderkey = this.sliderkey + 1;
         switch (this.currentTimeLevel) {
@@ -277,6 +290,12 @@
         };
         this.measuredChart.chartData = chartData;
       },
+      changeTimeLevel() {
+        if (this.timeLevelSlider !== this.timeLevelSliderBefore) {
+          this.timeLevelSliderBefore = this.timeLevelSlider;
+          this.switchToTimeLevel(Math.round(this.timeLevelSlider));
+        }
+      },
       changeDate() {
         //console.log(this.dateSlider);
         if (this.dateSlider !== this.dateSliderBefore) {
@@ -318,7 +337,7 @@
             this.$store.state.serviceUrl + "?end=" + date + "&level=" + this.currentTimeLevel
         )
         .then(function (response) {
-          console.log(response);
+          //console.log(response);
           if (response.status == "200") {
             current_component.sensors = response.data.sensors;
             current_component.activeSensor = current_component.sensors[current_component.activeSensorId];
@@ -329,17 +348,30 @@
             current_component.$root.$emit("sensorsListChanged", current_component.sensors);
             //current_component.initDistancesErrorChart();
             current_component.initMeasuredChart();
+            if (current_component.activeSensor.measured.length < 1) {
+              current_component.error = "There are no data for selected time.";
+            } else {
+              current_component.error = null;
+            }
+
           } else {
             alert(response.data.error);
+            current_component.error = response.data.error;
           }
         })
         .catch(function (error) {
           console.log(error);
+          current_component.error = error;
         });
       },
       switchToSensor(index) {
         this.activeSensorId = index;
         this.activeSensor = this.sensors[index];
+        if (this.activeSensor.measured.length < 1) {
+          this.error = "There are no data for selected time.";
+        } else {
+          this.error = null;
+        }
         // this.initDistancesErrorChart();
         this.initMeasuredChart();
         //console.log("STS", this.activeSensor);
