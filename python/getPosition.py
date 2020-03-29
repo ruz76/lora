@@ -101,15 +101,22 @@ def save_to_db(sensorid, coords_fixed, coords_fixed_wgs, coords_computed):
 
     distance = math.hypot(coords_fixed[0] - coords_computed[0], coords_fixed[1] - coords_computed[1])
 
-    mydb = getConnection()
-
     measured = (random.random() * 30) + 5
-    sensorid = sensorid + 1
 
     mycursor = mydb.cursor()
     ins = "INSERT INTO sensor_id" + str(sensorid) + " (distance_error, measure, sensed, lon, lat) VALUES (" + str(distance) + ", " + str(measured) + ", NOW(), " + str(coords_fixed_wgs[0]) + ", " + str(coords_fixed_wgs[1]) + ")"
     mycursor.execute(ins)
     mydb.commit()
+
+def getSensor(sensorid):
+
+    last = "SELECT x, y, lon, lat FROM sensors WHERE id = " + str(sensorid)
+    mycursor = mydb.cursor()
+    mycursor.execute(last)
+    records = mycursor.fetchall()
+    return records[0][0], records[0][1], records[0][2], records[0][3]
+
+mydb = getConnection()
 
 
 gtws = {'eui-b827ebfffe998292': [4906688, 3001349],
@@ -127,8 +134,7 @@ x, y = get_position(gtws, gtts)
 # print(x, y)
 
 sensorid = int(sys.argv[2])
-sensors = [[4911627, 3000316], [4911977, 3000666]]
-sensors_wgs = [[18.22554, 49.81724], [18.23091, 49.82001]]
-
-
-save_to_db(sensorid, sensors[sensorid], sensors_wgs[sensorid], [x, y])
+# sensors = [[4911627, 3000316], [4911977, 3000666]]
+# sensors_wgs = [[18.22554, 49.81724], [18.23091, 49.82001]]
+sx, sy, slon, slat = getSensor(sensorid + 1)
+save_to_db(sensorid + 1, [sx, sy], [slon, slat], [x, y])
