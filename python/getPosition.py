@@ -116,14 +116,27 @@ def getSensor(sensorid):
     records = mycursor.fetchall()
     return records[0][0], records[0][1], records[0][2], records[0][3]
 
+def getGtws():
+    gtws = {}
+    last = "SELECT mqttid, x, y FROM gtws"
+    mycursor = mydb.cursor()
+    mycursor.execute(last)
+    records = mycursor.fetchall()
+    for row in records:
+        gtws.update( {row[0] : [row[1], row[2]]} )
+
+    return gtws
+
 mydb = getConnection()
 
 
-gtws = {'eui-b827ebfffe998292': [4906688, 3001349],
-        'eui-b827ebfffed3b23f': [4906252, 2995691],
-        'eui-b827ebfffe411ace': [4906867, 3001407],
-        'eui-b827ebfffe13b290': [4914903, 3004002],
-        'eui-b827ebfffe71f386': [4913906, 2995884]}
+# gtws = {'eui-b827ebfffe998292': [4906688, 3001349],
+#         'eui-b827ebfffed3b23f': [4906252, 2995691],
+#         'eui-b827ebfffe411ace': [4906867, 3001407],
+#         'eui-b827ebfffe13b290': [4914903, 3004002],
+#         'eui-b827ebfffe71f386': [4913906, 2995884]}
+
+gtws = getGtws()
 
 line = sys.argv[1]
 # line = 'eui-b827ebfffe998292;2020-02-06T16:03:40.001312Z&eui-b827ebfffed3b23f;&eui-b827ebfffe411ace;2020-02-06T16:03:42.000112Z&eui-b827ebfffe13b290;2020-02-06T16:03:39.00005Z&eui-b827ebfffe71f386;2020-02-06T16:03:39.00007Z'
