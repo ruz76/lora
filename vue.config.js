@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
+  publicPath: './',
   configureWebpack: {
     // Set up all the aliases we use in our app.
     plugins: [
@@ -11,7 +12,7 @@ module.exports = {
     ]
   },
   pwa: {
-    name: 'Vue Argon Dashboard',
+    name: 'LoRa Dashboard',
     themeColor: '#172b4d',
     msTileColor: '#172b4d',
     appleMobileWebAppCapable: 'yes',

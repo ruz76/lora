@@ -41,11 +41,27 @@ Vue.use(VueLayers, {
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
-    count: 0
+    count: 0,
+    statType: 'avg',
+    activeSensor: null,
+    serviceUrl: "http://localhost/lora/get.php",
+    mapmove: true
   },
   mutations: {
     increment (state) {
       state.count++
+    },
+    setStat(state, type) {
+      state.statType = type
+    },
+    setActiveSensor(state, sensor) {
+      state.activeSensor = sensor;
+    },
+    changeMapMove(state) {
+      state.mapmove = !state.mapmove;
+    },
+    setMapMove(state, mapmove) {
+      state.mapmove = mapmove;
     }
   }
 });

@@ -2,19 +2,28 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar
       :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
+      short-title="LoRa"
+      title="LoRa"
     >
+
+      <Sensors/>
+
       <template slot="links">
         <sidebar-item
           :link="{
-            name: 'Sensors',
+            name: 'History',
             icon: 'ni ni-tv-2 text-primary',
             path: '/dashboard'
           }"
         />
 
-        <Sensors/>
+        <sidebar-item
+            :link="{
+            name: 'Realtime',
+            icon: 'ni ni-tv-2 text-primary',
+            path: '/realtime'
+          }"
+        />
 
       </template>
     </side-bar>

@@ -14,7 +14,7 @@ export default new Router({
       children: [
         {
           path: '/dashboard',
-          name: 'dashboard',
+          name: 'history',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
@@ -36,9 +36,9 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/Maps.vue')
         },
         {
-          path: '/tables',
-          name: 'tables',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Tables.vue')
+          path: '/realtime',
+          name: 'realtime',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Realtime.vue')
         }
       ]
     },

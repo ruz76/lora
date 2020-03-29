@@ -1,6 +1,9 @@
 import math
 import datetime
 import sys
+import mysql.connector
+import random
+from config import *
 
 def gt(dt_str):
     """Converts UTC date string to date."""
@@ -62,7 +65,7 @@ def get_position(gtws, gtts):
 
     minx, miny, maxx, maxy = get_extent(gtws)
 
-    cellsize = 10
+    cellsize = 50
     rows = int((maxy - miny) / cellsize) + 1  # +1 to cover whole area
     cols = int((maxx - minx) / cellsize) + 1  # +1 to cover whole area
 
@@ -92,15 +95,22 @@ def get_position(gtws, gtts):
                 besty = currenty + (cellsize / 2)
                 difference = current_difference
 
-    print(bestx, besty)
     return bestx, besty
 
+def save_to_db(sensorid, coords_fixed, coords_fixed_wgs, coords_computed):
 
-# gtws = {'eui-b827ebfffe998292': [0, 0],
-#         'eui-b827ebfffed3b23f': [5000, 5000],
-#         'eui-b827ebfffe411ace': [10000, 0],
-#         'eui-b827ebfffe13b290': [10000, 10000],
-#         'eui-b827ebfffe71f386': [0, 10000]}
+    distance = math.hypot(coords_fixed[0] - coords_computed[0], coords_fixed[1] - coords_computed[1])
+
+    mydb = getConnection()
+
+    measured = (random.random() * 30) + 5
+    sensorid = sensorid + 1
+
+    mycursor = mydb.cursor()
+    ins = "INSERT INTO sensor_id" + str(sensorid) + " (distance_error, measure, sensed, lon, lat) VALUES (" + str(distance) + ", " + str(measured) + ", NOW(), " + str(coords_fixed_wgs[0]) + ", " + str(coords_fixed_wgs[1]) + ")"
+    mycursor.execute(ins)
+    mydb.commit()
+
 
 gtws = {'eui-b827ebfffe998292': [4906688, 3001349],
         'eui-b827ebfffed3b23f': [4906252, 2995691],
@@ -112,5 +122,13 @@ line = sys.argv[1]
 # line = 'eui-b827ebfffe998292;2020-02-06T16:03:40.001312Z&eui-b827ebfffed3b23f;&eui-b827ebfffe411ace;2020-02-06T16:03:42.000112Z&eui-b827ebfffe13b290;2020-02-06T16:03:39.00005Z&eui-b827ebfffe71f386;2020-02-06T16:03:39.00007Z'
 # line = 'eui-b827ebfffe998292;2020-02-06T16:03:40.001312Z&eui-b827ebfffed3b23f;&eui-b827ebfffe411ace;2020-02-06T16:03:40.001312Z&eui-b827ebfffe13b290;2020-02-06T16:03:40.001312Z&eui-b827ebfffe71f386;2020-02-06T16:03:40.001312Z'
 gtts = get_current_gtts(line)
-get_position(gtws, gtts)
-#print(gtts)
+# print(gtts)
+x, y = get_position(gtws, gtts)
+# print(x, y)
+
+sensorid = int(sys.argv[2])
+sensors = [[4911627, 3000316], [4911977, 3000666]]
+sensors_wgs = [[18.22554, 49.81724], [18.23091, 49.82001]]
+
+
+save_to_db(sensorid, sensors[sensorid], sensors_wgs[sensorid], [x, y])

@@ -2,6 +2,7 @@
 # mycursor.execute("CREATE TABLE sensor_id1 (id SERIAL, distance_error FLOAT, measure FLOAT, sensed DATETIME DEFAULT NOW())")
 
 import mysql.connector
+import random
 
 mydb = mysql.connector.connect(
   host="127.0.0.1",
