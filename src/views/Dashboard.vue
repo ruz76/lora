@@ -12,9 +12,9 @@
             <Map :sensor="activeSensor" maptype="history"/>
             <!--// app map -->
             <div>
-              <b-button @click="setStat('min')">Min</b-button>
-              <b-button @click="setStat('max')">Max</b-button>
-              <b-button @click="setStat('avg')">Avg</b-button>
+              <b-button @click="setStat('min')" :variant="statTypeStatus('min')">Min</b-button>
+              <b-button @click="setStat('max')" :variant="statTypeStatus('max')">Max</b-button>
+              <b-button @click="setStat('avg')" :variant="statTypeStatus('avg')">Avg</b-button>
             </div>
             <div>
               <p><span v-if="error != null">{{error}}</span>&nbsp;</p>
@@ -27,14 +27,18 @@
                   :onchange="changeDate()"
                   :key="sliderkey"
               />
-              <p>Time level {{currentTimeLevel}}</p>
-              <base-slider
-                  ref="timeLevelSlider"
-                  v-model="timeLevelSlider"
-                  :range='timeLevelSliderRange'
-                  :step="1"
-                  :onchange="changeTimeLevel()"
-              />
+              <b-button v-for="(level, index) in timelevels" v-on:click="switchToTimeLevel(`${index}`)"
+                        :variant="timeLevelStatus(`${index}`)">
+                {{level}}
+              </b-button>
+              <!--<p>Time level {{currentTimeLevel}}</p>-->
+              <!--&lt;!&ndash;<base-slider&ndash;&gt;-->
+                  <!--ref="timeLevelSlider"-->
+                  <!--v-model="timeLevelSlider"-->
+                  <!--:range='timeLevelSliderRange'-->
+                  <!--:step="1"-->
+                  <!--:onchange="changeTimeLevel()"-->
+              <!--/>-->
               <!--<base-dropdown>-->
                 <!--<base-button slot="title" type="secondary" class="dropdown-toggle">Time level</base-button>-->
                 <!--<a-->
@@ -131,6 +135,7 @@
       return {
         error: null,
         sliderkey: 1,
+        currentTimeLevelIndex: 1,
         currentTimeLevel: "month",
         timelevels: ["year", "month", "day", "hour", "minute"],
         currentYear: 2020,
@@ -224,8 +229,17 @@
       }
     },
     methods: {
+      timeLevelStatus(index) {
+        console.log('AAAA', index, this.currentTimeLevel);
+        return this.currentTimeLevelIndex === index ? 'success' : 'secondary';
+      },
+      statTypeStatus(type) {
+        console.log('BBBB', type, this.statType);
+        return this.statType === type ? 'success' : 'secondary';
+      },
       switchToTimeLevel(index) {
         console.log(index);
+        this.currentTimeLevelIndex = index;
         this.currentTimeLevel = this.timelevels[index];
         this.sliderkey = this.sliderkey + 1;
         switch (this.currentTimeLevel) {
@@ -249,6 +263,7 @@
         }
       },
       setStat(type) {
+        this.statType = type;
         this.$store.commit('setStat', type);
         this.$root.$emit("updateMap", type);
       },
