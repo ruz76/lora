@@ -98,6 +98,7 @@ def get_position(gtws, gtts):
     return bestx, besty
 
 def save_to_db(sensorid, coords_fixed, coords_fixed_wgs, coords_computed):
+    """Saves all information from one sensor into database."""
 
     distance = math.hypot(coords_fixed[0] - coords_computed[0], coords_fixed[1] - coords_computed[1])
 
