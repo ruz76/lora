@@ -874,7 +874,7 @@ CREATE TABLE `sensor_id2` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `distance_error` float DEFAULT NULL,
   `measure` float DEFAULT NULL,
-  `sensed` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sensed` datetime,
   `lon` float DEFAULT NULL,
   `lat` float DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
@@ -884,9 +884,9 @@ CREATE TABLE `sensor_id3` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `distance_error` float DEFAULT NULL,
   `measure` float DEFAULT NULL,
-  `sensed` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sensed` datetime,
   `lon` float DEFAULT NULL,
   `lat` float DEFAULT NULL,
   `lastid` int(11) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5887 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
