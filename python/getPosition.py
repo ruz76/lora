@@ -110,6 +110,7 @@ def save_to_db(sensorid, coords_fixed, coords_fixed_wgs, coords_computed):
     mydb.commit()
 
 def getSensor(sensorid):
+    """Reads sensors from database"""
 
     last = "SELECT x, y, lon, lat FROM sensors WHERE id = " + str(sensorid)
     mycursor = mydb.cursor()
