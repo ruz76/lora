@@ -1,0 +1,11 @@
+import mysql.connector
+
+def getConnection():
+    mydb = mysql.connector.connect(
+        host="127.0.0.1",
+        port="3306",
+        database="database",
+        user="user",
+        passwd="password"
+    )
+    return mydb

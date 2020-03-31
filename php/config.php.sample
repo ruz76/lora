@@ -1,0 +1,8 @@
+<?php
+function connect() {
+  $con = ($GLOBALS["___mysqli_ston"] = mysqli_connect("localhost",  "username",  "password"));
+  mysqli_select_db($GLOBALS["___mysqli_ston"], "database");
+  return $con;
+}
+?>
+

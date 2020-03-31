@@ -31,7 +31,7 @@ def get_extent(gtws):
         if gtws[gtw][1] > maxy:
             maxy = gtws[gtw][1]
 
-    print (minx, miny, maxx, maxy)
+    # print (minx, miny, maxx, maxy)
     return minx, miny, maxx, maxy
 
 
@@ -53,7 +53,7 @@ def get_current_gtts(line):
         if ((gttsx[1]-firstdate) > datetime.timedelta(seconds=0.5)):
             while (gttsx[1]-firstdate) > datetime.timedelta(seconds=0.5):
                 gttsx = (gttsx[0], gttsx[1] - datetime.timedelta(seconds=0.5))
-            print(gttsx[1]-firstdate)
+            # print(gttsx[1]-firstdate)
         gtts_out[gttsx[0]] = gttsx[1]-firstdate+datetime.timedelta(seconds=0.0001)
 
     return gtts_out
