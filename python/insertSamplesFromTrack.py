@@ -3,6 +3,9 @@ import random
 import calendar
 from config import *
 
+# This is very slow implementation. It takes about 10 minutes to fill in one month
+# TODO read whole track into the memory and then fill sensor table from it
+
 def save_to_db(sensorid, sensed):
 
     last = "SELECT lastid FROM sensor_id" + str(sensorid) + " ORDER BY sensed DESC LIMIT 1"

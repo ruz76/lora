@@ -12,6 +12,7 @@ if len(sys.argv) < 3:
   exit(1)
 
 mydb = getConnection()
+mycursor = mydb.cursor()
 maxday = calendar.monthrange(2020, int(sys.argv[2]))[1]
 
 for k in range(maxday):
