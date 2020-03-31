@@ -1,3 +1,5 @@
+USE loraloc;
+
 DROP TABLE IF EXISTS gtws;
 DROP TABLE IF EXISTS track;
 DROP TABLE IF EXISTS sensors;
@@ -864,7 +866,7 @@ CREATE TABLE `sensor_id1` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `distance_error` float DEFAULT NULL,
   `measure` float DEFAULT NULL,
-  `sensed` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sensed` datetime,
   `lon` float DEFAULT NULL,
   `lat` float DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
